@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('forms', function (Blueprint $table) {
+        Schema::create('submissions', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
-            $table->string('name');
-            $table->string('status');
-            $table->json('schema');
-            $table->unsignedBigInteger('price')->nullable();
+            $table->foreignId('form_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('player_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->json('data');
+            $table->string('payment_status');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forms');
+        Schema::dropIfExists('submissions');
     }
 };
