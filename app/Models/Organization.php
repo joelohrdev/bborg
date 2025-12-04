@@ -8,16 +8,16 @@ use Carbon\CarbonInterface;
 use Database\Factories\OrganizationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property-read int $id
  * @property-read string $uuid
+ * @property-read int $user_id
  * @property-read string $name
  * @property-read string $slug
- * @property-read int $owner_id
  * @property-read string|null $logo_path
  * @property-read string|null $primary_color
  * @property-read CarbonInterface $created_at
@@ -34,9 +34,9 @@ final class Organization extends Model
         return [
             'id' => 'integer',
             'uuid' => 'string',
+            'user_id' => 'integer',
             'name' => 'string',
             'slug' => 'string',
-            'owner_id' => 'integer',
             'logo_path' => 'string',
             'primary_color' => 'string',
             'created_at' => 'datetime',
@@ -45,14 +45,9 @@ final class Organization extends Model
         ];
     }
 
-    /**
-     * @return BelongsToMany<User, ['organization_id', 'user_id']>
-     */
-    public function users(): BelongsToMany
+    public function user(): BelongsTo
     {
-        return $this->belongsToMany(User::class)
-            ->withPivot('role')
-            ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
 
     /**

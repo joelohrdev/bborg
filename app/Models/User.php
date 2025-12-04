@@ -8,7 +8,7 @@ namespace App\Models;
 use App\Enums\Role;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -56,14 +56,9 @@ final class User extends Authenticatable
             ->implode('');
     }
 
-    /**
-     * @return BelongsToMany<Organization, ['user_id', 'organization_id']>
-     */
-    public function organizations(): BelongsToMany
+    public function organization(): HasOne
     {
-        return $this->belongsToMany(Organization::class)
-            ->withPivot('role')
-            ->withTimestamps();
+        return $this->hasOne(Organization::class);
     }
 
     /**
